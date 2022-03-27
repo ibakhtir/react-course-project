@@ -10,9 +10,12 @@ const Users = () => {
   };
 
   const renderPhrase = (number) => {
-    return number <= 1 || number >= 5
-      ? `${number} человек тусанет с тобой сегодня`
-      : `${number} человека тусанут с тобой сегодня`;
+    const lastOne = Number(number.toString().slice(-1));
+    if (number > 4 && number < 15)
+      return `${number} человек тусанет с тобой сегодня`;
+    if ([2, 3, 4].indexOf(lastOne) >= 0)
+      return `${number} человека тусанут с тобой сегодня`;
+    if (lastOne === 1) return `${number} человек тусанет с тобой сегодня`;
   };
 
   if (users.length === 0) {
