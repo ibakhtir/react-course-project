@@ -11,27 +11,24 @@ const App = () => {
   };
 
   const handleToggleBookmark = (id) => {
-    const bookmarkState = [...users];
-    for (let state of bookmarkState) {
-      if (state._id === id) {
-        state.bookmark = !state.bookmark;
-      }
-    }
-
-    setUsers(bookmarkState);
+    setUsers(
+      users.map((user) => {
+        if (user._id === id) {
+          return { ...user, bookmark: !user.bookmark };
+        }
+        return user;
+      })
+    );
   };
 
   return (
     <div>
-      {<SearchStatus length={users.length} />}
-
-      {
-        <Users
-          users={users}
-          onDelete={handleDelete}
-          onToggleBookmark={handleToggleBookmark}
-        />
-      }
+      <SearchStatus length={users.length} />
+      <Users
+        onDelete={handleDelete}
+        onToggleBookmark={handleToggleBookmark}
+        users={users}
+      />
     </div>
   );
 };
