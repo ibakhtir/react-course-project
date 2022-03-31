@@ -1,6 +1,6 @@
 import React from "react";
 
-const SearchStatus = ({ length }) => {
+const Status = ({ length }) => {
   const getBadgeStyle = () => {
     return length === 0 ? "badge bg-danger" : "badge bg-primary";
   };
@@ -25,4 +25,4 @@ const SearchStatus = ({ length }) => {
   );
 };
 
-export default SearchStatus;
+export default Status;
