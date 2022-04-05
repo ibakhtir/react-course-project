@@ -1,4 +1,4 @@
-module.exports = {
+const newLocal = module.exports = {
   trailingComma: "none",
-  semi: true,
+  semi: true
 };
