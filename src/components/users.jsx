@@ -31,7 +31,7 @@ const Users = ({ users, ...rest }) => {
   };
 
   const filteredUsers = selectedProf
-    ? users.filter((user) => user.profession === selectedProf)
+    ? users.filter((user) => user.profession.name === selectedProf.name)
     : users;
 
   const count = filteredUsers.length;
