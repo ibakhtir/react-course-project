@@ -59,15 +59,15 @@ const Users = () => {
 
   if (users) {
     const filteredUsers = selectedProf
-      ? users.filter((user) => user.profession.name === selectedProf.name)
+      ? users.filter(
+          (user) =>
+            JSON.stringify(user.profession) === JSON.stringify(selectedProf)
+        )
       : users;
 
     const count = filteredUsers.length;
-
-    const sortedUsers = _.orderBy(filteredUsers, sortBy.path, sortBy.order);
-
-    const userCrop = paginate(sortedUsers, currentPage, pageSize);
-
+    const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
+    const usersCrop = paginate(sortedUsers, currentPage, pageSize);
     const clearFilter = () => {
       setSelectedProf();
     };
@@ -90,7 +90,7 @@ const Users = () => {
           <Status length={count} />
           {count > 0 && (
             <UserTable
-              users={userCrop}
+              users={usersCrop}
               onSort={handleSort}
               selectedSort={sortBy}
               onDelete={handleDelete}
