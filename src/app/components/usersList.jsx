@@ -8,15 +8,14 @@ import Status from "./status";
 import UserTable from "./userTable";
 import _ from "lodash";
 
-const Users = () => {
-  const pageSize = 8;
-
+const UsersList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfession] = useState();
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
-
   const [users, setUsers] = useState();
+
+  const pageSize = 8;
 
   useEffect(() => {
     api.users.fetchAll().then((data) => setUsers(data));
@@ -112,8 +111,8 @@ const Users = () => {
   return "loading...";
 };
 
-Users.propTypes = {
+UsersList.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object.isRequired)
 };
 
-export default Users;
+export default UsersList;
