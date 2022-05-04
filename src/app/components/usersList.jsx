@@ -10,10 +10,10 @@ import _ from "lodash";
 const UsersList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfession] = useState();
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
   const [users, setUsers] = useState();
-  const [inputValue, setInputValue] = useState(""); // добавляем состояние для введенных данных
 
   const pageSize = 8;
 
@@ -42,11 +42,16 @@ const UsersList = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedProf]);
+  }, [selectedProf, searchQuery]);
 
   const handleProfessionSelect = (item) => {
+    if (searchQuery !== "") setSearchQuery("");
     setSelectedProf(item);
-    setInputValue(""); // очищаем input
+  };
+
+  const handleSearchQuery = ({ target }) => {
+    setSelectedProf(undefined);
+    setSearchQuery(target.value);
   };
 
   const handlePageChange = (pageIndex) => {
@@ -57,36 +62,22 @@ const UsersList = () => {
     setSortBy(item);
   };
 
-  // Search begin
-
-  const searchItems = (item) => {
-    return item
-      ? users.filter((i) => i.name.toLowerCase().includes(item.toLowerCase()))
-      : users;
-  };
-
-  const items = searchItems(inputValue);
-
-  const handleSearch = (value) => {
-    setInputValue(value);
-  };
-
-  // Search end
-
   if (users) {
-    const filteredUsers = selectedProf
+    const filteredUsers = searchQuery
+      ? users.filter(
+          (user) =>
+            user.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1
+        )
+      : selectedProf
       ? users.filter(
           (user) =>
             JSON.stringify(user.profession) === JSON.stringify(selectedProf)
         )
-      : items;
+      : users;
 
     const count = filteredUsers.length;
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
-    const usersCrop =
-      count > pageSize // для корректного отображения пагинации
-        ? paginate(sortedUsers, currentPage, pageSize)
-        : sortedUsers;
+    const usersCrop = paginate(sortedUsers, currentPage, pageSize);
     const clearFilter = () => {
       setSelectedProf();
     };
@@ -107,18 +98,13 @@ const UsersList = () => {
         )}
         <div className="d-flex flex-column">
           <Status length={count} />
-
-          <div>
-            <input
-              className="w-100"
-              type="text"
-              value={inputValue}
-              placeholder="Search..."
-              onClick={clearFilter}
-              onChange={(e) => handleSearch(e.target.value)}
-            />
-          </div>
-
+          <input
+            type="text"
+            name="searchQuery"
+            placeholder="Search..."
+            onChange={handleSearchQuery}
+            value={searchQuery}
+          />
           {count > 0 && (
             <UserTable
               users={usersCrop}
