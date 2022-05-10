@@ -54,7 +54,8 @@ const EditPage = () => {
     const qualitiesArray = [];
     for (const el of elements) {
       for (const qual in qualities) {
-        if (el.value === qualities[qual].value) {
+        const val = el.value || el._id;
+        if (val === qualities[qual].value) {
           qualitiesArray.push({
             _id: qualities[qual].value,
             name: qualities[qual].label,
