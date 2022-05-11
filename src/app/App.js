@@ -5,15 +5,13 @@ import NavBar from "./components/ui/navBar";
 import Main from "./layouts/main";
 import Login from "./layouts/login";
 import Users from "./layouts/users";
-import Edit from "./components/page/editPage";
 
 const App = () => {
   return (
     <div>
       <NavBar />
       <Switch>
-        <Route path="/users/:userId?/edit" component={Edit} />
-        <Route path="/users/:userId?" component={Users} />
+        <Route path="/users/:userId?/:edit?" component={Users} />
         <Route path="/login/:type?" component={Login} />
         <Route path="/" exact component={Main} />
         <Redirect to="/" />

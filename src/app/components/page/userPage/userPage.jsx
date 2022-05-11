@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import api from "../../../api";
@@ -7,10 +7,15 @@ import Qualities from "../../ui/qualities";
 
 const UserPage = ({ userId }) => {
   const [user, setUser] = useState();
+  const history = useHistory();
 
   useEffect(() => {
     api.users.getById(userId).then((data) => setUser(data));
   }, []);
+
+  const handleClick = () => {
+    history.push(history.location.pathname + "/edit");
+  };
 
   if (user) {
     return (
@@ -20,9 +25,7 @@ const UserPage = ({ userId }) => {
         <Qualities qualities={user.qualities} />
         <p>completedMeetings: {user.completedMeetings}</p>
         <h2>Rate: {user.rate}</h2>
-        <Link to={`/users/${user._id}/edit`}>
-          <button>Изменить</button>
-        </Link>
+        <button onClick={handleClick}>Изменить</button>
       </div>
     );
   } else {
