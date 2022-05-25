@@ -134,6 +134,9 @@ const EditPage = () => {
 
   return (
     <div className="container mt-5">
+      <button className="btn btn-primary" onClick={() => history.goBack()}>
+        Назад
+      </button>
       <div className="row">
         <div className="col-md-6 offset-md-3 shadow p-4">
           {!isLoading && Object.keys(professions).length > 0 ? (
