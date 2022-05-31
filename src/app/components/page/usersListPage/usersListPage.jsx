@@ -1,39 +1,38 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import _ from "lodash";
+
 import { paginate } from "../../../utils/paginate";
 import Pagination from "../../common/pagination";
 import api from "../../../api";
 import GroupList from "../../common/groupList";
 import Status from "../../ui/status";
 import UserTable from "../../ui/userTable";
-import _ from "lodash";
+import { useUser } from "../../../hooks/useUsers";
 
 const UsersListPage = () => {
+  const { users } = useUser();
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfession] = useState();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
-  const [users, setUsers] = useState();
-
   const pageSize = 8;
 
-  useEffect(() => {
-    api.users.fetchAll().then((data) => setUsers(data));
-  }, []);
-
   const handleDelete = (userId) => {
-    setUsers(users.filter((user) => user._id !== userId));
+    // setUsers(users.filter((user) => user._id !== userId));
+    console.log(userId);
   };
 
-  const handleToggleBookmark = (id) => {
-    setUsers(
-      users.map((user) => {
-        if (user._id === id) {
-          return { ...user, bookmark: !user.bookmark };
-        }
-        return user;
-      })
-    );
+  const handleToggleBookMark = (id) => {
+    const newArray = users.map((user) => {
+      if (user._id === id) {
+        return { ...user, bookmark: !user.bookmark };
+      }
+      return user;
+    });
+    // setUsers(newArray);
+    console.log(newArray);
   };
 
   useEffect(() => {
@@ -91,7 +90,8 @@ const UsersListPage = () => {
               items={professions}
               onItemSelect={handleProfessionSelect}
             />
-            <button className="btn btn-secondary m-2" onClick={clearFilter}>
+            <button className="btn btn-secondary mt-2" onClick={clearFilter}>
+              {" "}
               Очистить
             </button>
           </div>
@@ -111,7 +111,7 @@ const UsersListPage = () => {
               onSort={handleSort}
               selectedSort={sortBy}
               onDelete={handleDelete}
-              onToggleBookmark={handleToggleBookmark}
+              onToggleBookMark={handleToggleBookMark}
             />
           )}
           <div className="d-flex justify-content-center">
@@ -127,6 +127,10 @@ const UsersListPage = () => {
     );
   }
   return "loading...";
+};
+
+UsersListPage.propTypes = {
+  users: PropTypes.array
 };
 
 export default UsersListPage;
