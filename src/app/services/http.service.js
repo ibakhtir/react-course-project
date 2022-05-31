@@ -14,7 +14,6 @@ axios.interceptors.response.use(
       error.response.status < 500;
     if (!expectedErrors) {
       toast.error("Something was wrong. Try it later.");
-      // toast("Unexpected error");
     }
     return Promise.reject(error);
   }

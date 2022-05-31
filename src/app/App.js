@@ -7,18 +7,21 @@ import Main from "./layouts/main";
 import Login from "./layouts/login";
 import Users from "./layouts/users";
 import { ProfessionProvider } from "./hooks/useProfession";
+import { QualityProvider } from "./hooks/useQuality";
 
 const App = () => {
   return (
     <div>
       <NavBar />
       <ProfessionProvider>
-        <Switch>
-          <Route path="/users/:userId?/:edit?" component={Users} />
-          <Route path="/login/:type?" component={Login} />
-          <Route path="/" exact component={Main} />
-          <Redirect to="/" />
-        </Switch>
+        <QualityProvider>
+          <Switch>
+            <Route path="/users/:userId?/:edit?" component={Users} />
+            <Route path="/login/:type?" component={Login} />
+            <Route path="/" exact component={Main} />
+            <Redirect to="/" />
+          </Switch>
+        </QualityProvider>
       </ProfessionProvider>
       <ToastContainer />
     </div>
