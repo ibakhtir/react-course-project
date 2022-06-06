@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import _ from "lodash";
-
 import { paginate } from "../../../utils/paginate";
 import Pagination from "../../common/pagination";
 import api from "../../../api";
 import GroupList from "../../common/groupList";
-import Status from "../../ui/status";
-import UserTable from "../../ui/userTable";
+import SearchStatus from "../../ui/searchStatus";
+import UserTable from "../../ui/usersTable";
+import _ from "lodash";
 import { useUser } from "../../../hooks/useUsers";
-
 const UsersListPage = () => {
   const { users } = useUser();
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,7 +21,6 @@ const UsersListPage = () => {
     // setUsers(users.filter((user) => user._id !== userId));
     console.log(userId);
   };
-
   const handleToggleBookMark = (id) => {
     const newArray = users.map((user) => {
       if (user._id === id) {
@@ -47,7 +44,6 @@ const UsersListPage = () => {
     if (searchQuery !== "") setSearchQuery("");
     setSelectedProf(item);
   };
-
   const handleSearchQuery = ({ target }) => {
     setSelectedProf(undefined);
     setSearchQuery(target.value);
@@ -56,7 +52,6 @@ const UsersListPage = () => {
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
   };
-
   const handleSort = (item) => {
     setSortBy(item);
   };
@@ -97,7 +92,7 @@ const UsersListPage = () => {
           </div>
         )}
         <div className="d-flex flex-column">
-          <Status length={count} />
+          <SearchStatus length={count} />
           <input
             type="text"
             name="searchQuery"
@@ -128,7 +123,6 @@ const UsersListPage = () => {
   }
   return "loading...";
 };
-
 UsersListPage.propTypes = {
   users: PropTypes.array
 };

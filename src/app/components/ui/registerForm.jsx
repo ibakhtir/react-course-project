@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
 import api from "../../api";
@@ -17,7 +17,7 @@ const RegisterForm = () => {
     licence: false
   });
   const [qualities, setQualities] = useState([]);
-  const [professions, setProfession] = useState();
+  const [professions, setProfession] = useState([]);
   const [errors, setErrors] = useState({});
 
   const getProfessionById = (id) => {
@@ -27,7 +27,6 @@ const RegisterForm = () => {
       }
     }
   };
-
   const getQualities = (elements) => {
     const qualitiesArray = [];
     for (const elem of elements) {
@@ -54,33 +53,47 @@ const RegisterForm = () => {
     });
     api.qualities.fetchAll().then((data) => {
       const qualitiesList = Object.keys(data).map((optionName) => ({
-        label: data[optionName].name,
         value: data[optionName]._id,
+        label: data[optionName].name,
         color: data[optionName].color
       }));
       setQualities(qualitiesList);
     });
   }, []);
-
   const handleChange = (target) => {
-    setData((prevState) => ({ ...prevState, [target.name]: target.value }));
+    setData((prevState) => ({
+      ...prevState,
+      [target.name]: target.value
+    }));
   };
-
   const validatorConfig = {
     email: {
-      isRequired: { message: "Электронная почта обязательна для заполнения" },
-      isEmail: { message: "Электронная почта введена некорректно" }
+      isRequired: {
+        message: "Электронная почта обязательна для заполнения"
+      },
+      isEmail: {
+        message: "Email введен некорректно"
+      }
     },
     password: {
-      isRequired: { message: "Пароль обязательный для заполнения" },
+      isRequired: {
+        message: "Пароль обязателен для заполнения"
+      },
       isCapitalSymbol: {
         message: "Пароль должен содержать хотя бы одну заглавную букву"
       },
-      isContainDigit: { message: "Пароль должен содержать хотя бы одну цифру" },
-      min: { message: "Пароль должен состоять минимум из 8 символов", value: 8 }
+      isContainDigit: {
+        message: "Пароль должен содержать хотя бы одно число"
+      },
+      min: {
+        message: "Пароль должен состоять минимум из 8 символов",
+        value: 8
+      }
     },
     profession: {
-      isRequired: { message: "Обязательно выберите вашу профессию" }
+      isRequired: {
+        message: "Обязательно выберите вашу профессию"
+      }
     },
     licence: {
       isRequired: {
@@ -89,17 +102,14 @@ const RegisterForm = () => {
       }
     }
   };
-
   useEffect(() => {
     validate();
   }, [data]);
-
   const validate = () => {
     const errors = validator(data, validatorConfig);
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
-
   const isValid = Object.keys(errors).length === 0;
 
   const handleSubmit = (e) => {
@@ -113,7 +123,6 @@ const RegisterForm = () => {
       qualities: getQualities(qualities)
     });
   };
-
   return (
     <form onSubmit={handleSubmit}>
       <TextField
@@ -132,10 +141,10 @@ const RegisterForm = () => {
         error={errors.password}
       />
       <SelectField
-        label="Выберите вашу профессию"
+        label="Выбери свою профессию"
         defaultOption="Choose..."
-        name="profession"
         options={professions}
+        name="profession"
         onChange={handleChange}
         value={data.profession}
         error={errors.profession}
@@ -160,16 +169,16 @@ const RegisterForm = () => {
       />
       <CheckBoxField
         value={data.licence}
-        name="licence"
         onChange={handleChange}
+        name="licence"
         error={errors.licence}
       >
-        <a> Подтвердить лицензионное соглашение </a>
+        Подтвердить <a>лицензионное соглашение</a>
       </CheckBoxField>
       <button
+        className="btn btn-primary w-100 mx-auto"
         type="submit"
         disabled={!isValid}
-        className="btn btn-primary w-100 mx-auto"
       >
         Submit
       </button>

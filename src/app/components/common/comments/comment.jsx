@@ -1,32 +1,29 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-
-import api from "../../../api";
 import { displayDate } from "../../../utils/displayDate";
-
+import API from "../../../api";
 const Comment = ({
-  _id: id,
-  userId,
   content,
   created_at: created,
+  _id: id,
+  userId,
   onRemove
 }) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState();
   const [isLoading, setIsLoading] = useState(false);
-
   useEffect(() => {
     setIsLoading(true);
-    api.users.getById(userId).then((data) => {
+    API.users.getById(userId).then((data) => {
       setUser(data);
       setIsLoading(false);
     });
   }, []);
 
   return (
-    <div className="bg-light card-body mb-3">
+    <div className="bg-light card-body  mb-3">
       <div className="row">
         {isLoading ? (
-          "Loading..."
+          "Loading ..."
         ) : (
           <div className="col">
             <div className="d-flex flex-start ">
@@ -45,8 +42,8 @@ const Comment = ({
                 <div className="mb-4">
                   <div className="d-flex justify-content-between align-items-center">
                     <p className="mb-1 ">
-                      {user.name}
-                      <span className="small"> - {displayDate(created)}</span>
+                      {user && user.name}{" "}
+                      <span className="small">- {displayDate(created)}</span>
                     </p>
                     <button
                       className="btn btn-sm text-primary d-flex align-items-center"
@@ -65,13 +62,13 @@ const Comment = ({
     </div>
   );
 };
-
 Comment.propTypes = {
-  _id: PropTypes.string,
-  userId: PropTypes.string,
   content: PropTypes.string,
+  edited_at: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   created_at: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  onRemove: PropTypes.func
+  userId: PropTypes.string,
+  onRemove: PropTypes.func,
+  _id: PropTypes.string
 };
 
 export default Comment;
