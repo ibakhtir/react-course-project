@@ -17,7 +17,8 @@ const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   async function signUp({ email, password, ...rest }) {
-    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FIREBASE_KEY}`;
+    const key = "AIzaSyA4lS3PWgV3z1_r-mT2u5VcMRBn3Wyun7Q";
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${key}`;
 
     try {
       const { data } = await httpAuth.post(url, {
@@ -39,9 +40,38 @@ const AuthProvider = ({ children }) => {
           throw errorObject;
         }
       }
-      // throw new Error
     }
   }
+
+  async function signIn({ email, password }) {
+    const key = "AIzaSyA4lS3PWgV3z1_r-mT2u5VcMRBn3Wyun7Q";
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${key}`;
+
+    try {
+      const { data } = await httpAuth.post(url, {
+        email,
+        password,
+        returnSecureToken: true
+      });
+      setTokens(data);
+    } catch (error) {
+      const { code, message } = error.response.data.error;
+      if (code === 400) {
+        if (message === "EMAIL_NOT_FOUND") {
+          const errorObject = {
+            email: "Пользователь с таким Email не найден"
+          };
+          throw errorObject;
+        } else if (message === "INVALID_PASSWORD") {
+          const errorObject = {
+            password: "Неверный пароль"
+          };
+          throw errorObject;
+        }
+      }
+    }
+  }
+
   async function createUser(data) {
     try {
       const { content } = userService.create(data);
@@ -61,7 +91,7 @@ const AuthProvider = ({ children }) => {
     }
   }, [error]);
   return (
-    <AuthContext.Provider value={{ signUp, currentUser }}>
+    <AuthContext.Provider value={{ signIn, signUp, currentUser }}>
       {children}
     </AuthContext.Provider>
   );
