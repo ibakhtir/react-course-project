@@ -1,4 +1,5 @@
-const newLocal = (module.exports = {
-  trailingComma: "none",
-  semi: true
-});
+module.exports = {
+    trailingComma: "none",
+    tabWidth: 4,
+    semi: true
+};
