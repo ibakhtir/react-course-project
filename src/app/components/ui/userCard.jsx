@@ -1,17 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
-
 import { useAuth } from "../../hooks/useAuth";
-
 const UserCard = ({ user }) => {
   const history = useHistory();
   const { currentUser } = useAuth();
-
   const handleClick = () => {
     history.push(history.location.pathname + "/edit");
   };
-
   return (
     <div className="card mb-3">
       <div className="card-body">
@@ -23,6 +19,7 @@ const UserCard = ({ user }) => {
             <i className="bi bi-gear"></i>
           </button>
         )}
+
         <div className="d-flex flex-column align-items-center text-center position-relative">
           <img src={user.image} className="rounded-circle" width="150" />
           <div className="mt-3">
@@ -42,7 +39,6 @@ const UserCard = ({ user }) => {
     </div>
   );
 };
-
 UserCard.propTypes = {
   user: PropTypes.object
 };
